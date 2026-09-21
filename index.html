@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IO Tower | Rajnigandha CHSL | PCPL</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #1a2337;
+        --muted: #8894aa;
+        --body-text: #5b6a85;
+        --line: #e8ebf1;
+        --tint: #eef2fb;
+        --accent: #2f4a8a;
+        --page: #ffffff;
+        --surface: #ffffff;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--page);
+        color: var(--ink);
+      }
+
+      /* centres the whole section in the viewport */
+      .page-section {
+        min-height: 100vh;
+        display: flex;
+      }
+
+      /* margin:auto centres it without clipping when content is taller than the viewport.
+         max-width (not width) overrides Bootstrap's own container caps: 1140px at >=1200px
+         and 1320px at >=1400px. A fixed width would still be clamped by those, and would
+         overflow on phones where .container has no cap. */
+      .page-section > .container {
+        margin: auto;
+        width: 100%;
+        /* 1200px of visible content: Bootstrap's .container adds --bs-gutter-x (24px)
+           of horizontal padding, so the box must be 1200 + 24 for the card and the
+           button grid to measure 1200px. */
+        max-width: calc(1200px + var(--bs-gutter-x)) !important;
+      }
+
+      /* ---------- project card ---------- */
+      .project-panel {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--surface);
+        box-shadow: 0 10px 40px rgba(26, 35, 55, 0.06);
+        overflow: hidden;
+      }
+
+      /* vertical divider between the three card columns */
+      .panel-col {
+        border-right: 1px solid var(--line);
+      }
+
+      .spec-stack {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .spec {
+        padding: 1.75rem 1.5rem;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        gap: 0.9rem;
+        align-items: flex-start;
+      }
+
+      .spec:last-child {
+        border-bottom: none;
+      }
+
+      .spec-icon {
+        flex: 0 0 auto;
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        background: var(--tint);
+        color: var(--accent);
+        display: grid;
+        place-items: center;
+        font-size: 1rem;
+      }
+
+      .spec-label {
+        font-size: 0.68rem;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.35rem;
+      }
+
+      .spec-value {
+        font-size: 0.95rem;
+        font-weight: 600;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      /* flex column + margin-top:auto on the RERA box lines both QR panels
+         up along the bottom, whatever the address length above them */
+      .project-identity {
+        padding: 1.85rem 1.5rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .project-identity .rera-box {
+        margin-top: auto;
+      }
+
+      .project-name {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.8rem;
+        letter-spacing: 0.02em;
+        margin-bottom: 0.5rem;
+      }
+
+      .project-subtitle {
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .project-address {
+        color: var(--body-text);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+      }
+
+      /* stacked, because each column is only ~1/3 of the card */
+      .rera-box {
+        background: #f5f7fc;
+        border-radius: 12px;
+        padding: 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        align-items: flex-start;
+      }
+
+      .rera-box img {
+        width: 104px;
+        height: 104px;
+        flex: 0 0 auto;
+        border-radius: 6px;
+        background: #fff;
+      }
+
+      .rera-no {
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 0.35rem;
+      }
+
+      .rera-note {
+        font-size: 0.85rem;
+        color: var(--body-text);
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      /* ---------- document buttons ---------- */
+      .section-eyebrow {
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .doc-btn {
+        width: 100%;
+        height: 100%;
+        text-align: left;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        padding: 1rem 1.15rem;
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.92rem;
+        transition:
+          border-color 0.18s,
+          box-shadow 0.18s,
+          transform 0.18s;
+      }
+
+      .doc-btn:hover,
+      .doc-btn:focus-visible {
+        border-color: var(--accent);
+        box-shadow: 0 6px 20px rgba(47, 74, 138, 0.12);
+        transform: translateY(-2px);
+        color: var(--accent);
+      }
+
+      .doc-btn .bi-file-earmark-pdf {
+        font-size: 1.35rem;
+        color: #c0392b;
+      }
+
+      .doc-btn .bi-arrow-up-right {
+        margin-left: auto;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .doc-btn small {
+        color: var(--body-text);
+      }
+
+      /* stacked columns: the divider moves from the right edge to the bottom */
+      @media (max-width: 991.98px) {
+        .panel-col {
+          border-right: none;
+          border-bottom: 1px solid var(--line);
+        }
+      }
+
+      @media (max-width: 575.98px) {
+        .project-identity {
+          padding: 1.5rem 1.25rem;
+        }
+        .project-name {
+          font-size: 1.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page-section py-5">
+      <div class="container text-center">
+        <!-- ===== Document buttons ===== -->
+        <div class="section-eyebrow mb-2">Project Documents</div>
+        <h2 class="h4 fw-bold mb-4">
+          IO Tower &mdash; Rajnigandha CHSL &middot; Notices &amp; Approvals
+        </h2>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <a
+              class="doc-btn"
+              target="_blank"
+              rel="noopener"
+              href="assets/Rajnigandha for Upload on Site/English Newspaper Notice The Free Press Journal_Rajnigandha CHSL.pdf"
+            >
+              <i class="bi bi-file-earmark-pdf"></i>
+              <span
+                >English Newspaper Notice<br /><small class="fw-normal"
+                  >The Free Press Journal</small
+                ></span
+              >
+              <i class="bi bi-arrow-up-right"></i>
+            </a>
+          </div>
+          <div class="col-md-6">
+            <a
+              class="doc-btn"
+              target="_blank"
+              rel="noopener"
+              href="assets/Rajnigandha for Upload on Site/Marathi Newspaper Notice Navshakti_Rajnigandha CHSL.pdf"
+            >
+              <i class="bi bi-file-earmark-pdf"></i>
+              <span
+                >Marathi Newspaper Notice<br /><small class="fw-normal"
+                  >Navshakti</small
+                ></span
+              >
+              <i class="bi bi-arrow-up-right"></i>
+            </a>
+          </div>
+          <div class="col-md-6">
+            <a
+              class="doc-btn"
+              target="_blank"
+              rel="noopener"
+              href="assets/Rajnigandha for Upload on Site/Rajnigandha CHSL_Consent to establish_27-01-2026.pdf"
+            >
+              <i class="bi bi-file-earmark-pdf"></i>
+              <span
+                >Consent to Establish<br /><small class="fw-normal"
+                  >Dated 27-01-2026</small
+                ></span
+              >
+              <i class="bi bi-arrow-up-right"></i>
+            </a>
+          </div>
+          <div class="col-md-6">
+            <a
+              class="doc-btn"
+              target="_blank"
+              rel="noopener"
+              href="assets/Rajnigandha for Upload on Site/Rajnigandha CHSL_EC_letter_08.01.2026 (1).pdf"
+            >
+              <i class="bi bi-file-earmark-pdf"></i>
+              <span
+                >Environment Clearance Letter<br /><small class="fw-normal"
+                  >Dated 08-01-2026</small
+                ></span
+              >
+              <i class="bi bi-arrow-up-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- ===== Project card ===== -->
+        <div class="project-panel mt-5 text-start">
+          <div class="row g-0">
+            <!-- Column 1: project details -->
+            <div class="col-lg-4 panel-col">
+              <div class="spec-stack h-100">
+                <div class="spec">
+                  <div class="spec-icon"><i class="bi bi-hammer"></i></div>
+                  <div>
+                    <div class="spec-label">Project Status</div>
+                    <p class="spec-value">Under Construction</p>
+                  </div>
+                </div>
+                <div class="spec">
+                  <div class="spec-icon"><i class="bi bi-telephone"></i></div>
+                  <div>
+                    <div class="spec-label">Phone Number</div>
+                    <p class="spec-value">+91 2262769999</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 2: IO Tower -->
+            <div class="col-lg-4 panel-col">
+              <div class="project-identity">
+                <h2 class="project-name">IO TOWER</h2>
+                <p class="project-subtitle">Project IO Tower By PCPL</p>
+                <p class="project-address">
+                  Somanigram, Near Ram Mandir Railway Station, Goregaon West,
+                  Mumbai &mdash; 400104
+                </p>
+
+                <div class="rera-box">
+                  <img
+                    src="assets/Qrcode - Io Tower by PCPL.png"
+                    alt="MahaRERA registration QR code for IO Tower by PCPL"
+                  />
+                  <div>
+                    <div class="rera-no">MahaRERA No: PC1181012601793</div>
+                    <p class="rera-note">
+                      Scan the QR code, or view the registration on
+                      <a
+                        href="https://maharerait.maharashtra.gov.in/project/view/66376"
+                        target="_blank"
+                        rel="noopener"
+                        >maharera.maharashtra.gov.in</a
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 3: IO Residences -->
+            <div class="col-lg-4">
+              <div class="project-identity">
+                <h2 class="project-name">IO RESIDENCES</h2>
+                <p class="project-subtitle">Project IO Residence By PCPL.</p>
+                <p class="project-address">
+                  <!-- TODO: confirm the full address for IO Residences -->
+                  Somanigram, Near Ram Mandir Railway Station, Goregaon West,
+                  Mumbai - 400104
+                </p>
+
+                <div class="rera-box">
+                  <img
+                    src="assets/Qrcode - io residences by PCPL.png"
+                    alt="MahaRERA registration QR code for IO Residences by PCPL"
+                  />
+                  <div>
+                    <!-- TODO: add the MahaRERA PR number for IO Residences -->
+                    <div class="rera-no">MahaRERA No: PR1181012601732</div>
+                    <p class="rera-note">
+                      Scan the QR code, or view the registration on
+                      <a
+                        href="https://maharerait.maharashtra.gov.in/project/view/66190"
+                        target="_blank"
+                        rel="noopener"
+                        >maharera.maharashtra.gov.in</a
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
